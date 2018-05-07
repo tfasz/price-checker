@@ -1,0 +1,5 @@
+{
+  "slack.url": "https://hooks.slack.com/services/[HOOK URL]",
+  "slack.channel": "[NOTIFY CHANNEL NAME]",
+  "slack.user": "[USER]"
+}

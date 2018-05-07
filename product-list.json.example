@@ -1,0 +1,15 @@
+{
+    "sites": [
+        {
+            "site": "Foo Site",
+            "regex": ".*<input.+id=\"ciItemPrice\".+value=\"([0-9\\.]+)\".*",
+            "user-agent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Mobile Safari/537.36",
+            "products": [
+                {
+                    "name": "Foo Product",
+                    "url": "https://foo-site.com/foo-product"
+                }
+            ]
+        }
+     ]
+}
