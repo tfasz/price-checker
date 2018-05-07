@@ -21,8 +21,6 @@ log = logging.getLogger('check-price')
 log.setLevel(logging.DEBUG)
 log.addHandler(log_file)
 
-url = 'https://www.homedepot.com/p/Rheem-Performance-Platinum-65-gal-10-Year-Hybrid-High-Efficiency-Smart-Tank-Electric-Water-Heater-XE65T10HD50U1/303419586'
-
 class Config:
     def __init__(self):
         self.config = {} 
