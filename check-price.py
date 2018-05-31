@@ -66,10 +66,11 @@ class Slack:
 
     def send(self, msg):
         try:
-            log.debug('Sending message: ' + msg)
-            data = 'payload={{"username": "{0}", "text": "{1}"}}'.format(config.get('slack.user'), msg)
-            r = urllib2.Request(config.get('slack.url'))
-            urllib2.urlopen(r, data)
+            payload = {}
+            payload['username'] = config.get('slack.user')
+            payload['text'] = msg
+            r = urllib2.Request(config.get('slack.url'), json.dumps(payload), {'Content-Type': 'application/json'})
+            urllib2.urlopen(r)
             log.debug('Message sent ')
         except Exception as e:
             log.exception("Error sending message.")
@@ -107,6 +108,6 @@ for site in product_list.sites:
                     if old_price is not None and price != old_price:
                         log.info("Price has changed")
                         slack = Slack(config)
-                        slack.send("Price has changed from {0} to {1}".format(locale.currency(old_price, grouping=True), locale.currency(price, grouping=True)))
+                        slack.send("Price of *{0}* has changed from {1} to {2}".format(product['name'], locale.currency(old_price, grouping=True), locale.currency(price, grouping=True)))
 
 state.save()
