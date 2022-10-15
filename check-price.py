@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import json
 import locale
@@ -8,7 +8,7 @@ import os
 import re
 import requests
 import sys
-import urllib2
+import urllib.request as urllib2
 
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 app_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
