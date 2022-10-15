@@ -84,30 +84,31 @@ for site in product_list.sites:
         headers["User-Agent"] = site["user-agent"]
 
     for product in site["products"]:
-        log.debug("Checking product \"{0}\"".format(product["name"]))
-        product_id = product["url"]
-        r = requests.get(product["url"], headers=headers, stream=True)
-        for line in r.iter_lines():
-            match = re.search(site["regex"], line)
-            if match:
-                old_price = state.get(product_id)
-                if old_price is not None:
-                    log.info("Old price is {0}".format(locale.currency(old_price, grouping=True)))
-        
-                try:
-                    price = float(match.group(1))
-                except ValueError:
-                    price = None
-        
-                if price is None:
-                    log.info("Cound not find price")
-                else:
-                    log.info("Price: " + locale.currency(price, grouping=True))
-                    state.set(product_id, price)
-        
-                    if old_price is not None and price != old_price:
-                        log.info("Price has changed")
-                        slack = Slack(config)
-                        slack.send("Price of *{0}* has changed from {1} to {2}".format(product['name'], locale.currency(old_price, grouping=True), locale.currency(price, grouping=True)))
+        if 'disabled' not in product or not product["disabled"]:
+            log.debug("Checking product \"{0}\"".format(product["name"]))
+            product_id = product["url"]
+            r = requests.get(product["url"], headers=headers, stream=True)
+            for line in r.iter_lines():
+                match = re.search(site["regex"], line)
+                if match:
+                    old_price = state.get(product_id)
+                    if old_price is not None:
+                        log.info("Old price is {0}".format(locale.currency(old_price, grouping=True)))
+
+                    try:
+                        price = float(match.group(1))
+                    except ValueError:
+                        price = None
+
+                    if price is None:
+                        log.info("Cound not find price")
+                    else:
+                        log.info("Price: " + locale.currency(price, grouping=True))
+                        state.set(product_id, price)
+
+                        if old_price is not None and price != old_price:
+                            log.info("Price has changed")
+                            slack = Slack(config)
+                            slack.send("Price of *{0}* has changed from {1} to {2}".format(product['name'], locale.currency(old_price, grouping=True), locale.currency(price, grouping=True)))
 
 state.save()

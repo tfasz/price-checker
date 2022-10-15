@@ -6,6 +6,7 @@
             "user-agent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Mobile Safari/537.36",
             "products": [
                 {
+                    "disabled": false,
                     "name": "Foo Product",
                     "url": "https://foo-site.com/foo-product"
                 }
