@@ -8,7 +8,7 @@ import os
 import re
 import requests
 import sys
-import urllib.request as urllib2
+import urllib.request
 
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 app_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -69,7 +69,7 @@ class Slack:
             payload = {}
             payload['username'] = config.get('slack.user')
             payload['text'] = msg
-            r = urllib2.Request(config.get('slack.url'), json.dumps(payload), {'Content-Type': 'application/json'})
+            r = urllib.Request(config.get('slack.url'), json.dumps(payload), {'Content-Type': 'application/json'})
             urllib2.urlopen(r)
             log.debug('Message sent ')
         except Exception as e:
@@ -89,7 +89,7 @@ for site in product_list.sites:
             product_id = product["url"]
             r = requests.get(product["url"], headers=headers, stream=True)
             for line in r.iter_lines():
-                match = re.search(site["regex"], line)
+                match = re.search(site["regex"], line.decode('utf-8'))
                 if match:
                     old_price = state.get(product_id)
                     if old_price is not None:
@@ -97,6 +97,8 @@ for site in product_list.sites:
 
                     try:
                         price = float(match.group(1))
+                        if 'priceInCents' in product and product['priceInCents']:
+                            price = price/100
                     except ValueError:
                         price = None
 
